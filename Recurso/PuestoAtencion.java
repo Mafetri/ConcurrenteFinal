@@ -1,13 +1,16 @@
 package Recurso;
 import java.util.concurrent.*;
+import java.util.Random;
 
 public class PuestoAtencion {
+    private String nombre;
     private Semaphore cola;
     private Semaphore puesto;
     private Semaphore guardia;
     private final Terminal[] TERMINALES;
 
-    public PuestoAtencion(int capacidadMaxima, Terminal[] terminales){
+    public PuestoAtencion(String nombre, int capacidadMaxima, Terminal[] terminales){
+        this.nombre = nombre;
         this.TERMINALES = terminales;
         puesto = new Semaphore(0, true);
         guardia = new Semaphore(1);
@@ -28,9 +31,11 @@ public class PuestoAtencion {
 
     public Boleto obtenerBoleto() throws Exception{
         // Obtiene su boleto
-        int indexTerminal = (int)Math.random() % TERMINALES.length;
+        int indexTerminal = new Random().nextInt(3);
         String terminal = TERMINALES[indexTerminal].getNombre();
-        int puerta = (int)Math.random() % TERMINALES[indexTerminal].getPuertas().length;
+
+        int[] puertasDisponibles = TERMINALES[indexTerminal].getPuertas();
+        int puerta = puertasDisponibles[new Random().nextInt(puertasDisponibles.length-1)];
         Boleto boleto = new Boleto(terminal, puerta);
 
         // Libera un lugar en la cola y le avisa al guardia
@@ -38,6 +43,10 @@ public class PuestoAtencion {
         guardia.release();
 
         return boleto;
+    }
+
+    public String getNombre() {
+        return this.nombre;
     }
 
     // ======== Guardia ========
