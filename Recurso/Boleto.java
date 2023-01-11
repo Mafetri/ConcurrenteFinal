@@ -1,3 +1,5 @@
+package Recurso;
+
 public class Boleto {
     private String terminal;
     private int puerta;

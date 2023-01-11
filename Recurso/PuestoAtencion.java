@@ -1,13 +1,13 @@
+package Recurso;
 import java.util.concurrent.*;
-import java.util.*;
 
-public class CheckIn {
+public class PuestoAtencion {
     private Semaphore cola;
     private Semaphore puesto;
     private Semaphore guardia;
     private final Terminal[] TERMINALES;
 
-    public CheckIn(int capacidadMaxima, Terminal[] terminales){
+    public PuestoAtencion(int capacidadMaxima, Terminal[] terminales){
         this.TERMINALES = terminales;
         puesto = new Semaphore(0, true);
         guardia = new Semaphore(1);
@@ -16,8 +16,11 @@ public class CheckIn {
 
     // ======== Pasajero ========
     public void hacerFila () throws Exception{
+        System.out.println(Thread.currentThread().getName() + " está en el hall.");
+
         // Espera en el Hall a que haya lugar en la fila
         cola.acquire();
+        System.out.println(Thread.currentThread().getName() + " está haciendo la fila.");
 
         // Hace la cola y espera a que un guardia le permita pasar
         puesto.acquire();

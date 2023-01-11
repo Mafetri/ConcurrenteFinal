@@ -1,3 +1,5 @@
+package Recurso;
+
 public class Terminal {
     private String nombre;
     private int[] puertas;
