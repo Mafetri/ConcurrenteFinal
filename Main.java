@@ -7,16 +7,18 @@ public class Main {
         int horaCierre = 22;
         int numPuestosAtencion = 3;
         int capacidadMaximaFila = 10;
-        int numTerminales = 3;
+        int numTerminales = 5;
         int numPuertas = 20;
         int unMinuto = 10; // Un minuto equivale a 10 ms
+        int capacidadTren = 10;
+        int numPasajeros = 20;
 
         // Terminales
         Terminal[] terminales = new Terminal[numTerminales];
         int puertaNum = 1;
         System.out.println("Terminales Disponibles:");
         for( int i = 0; i < terminales.length; i++){
-            int[] puertas = new int[numPuertas/3];
+            int[] puertas = new int[numPuertas/terminales.length];
             String nombreTerminal = Character.toString((char)(i + 65));
             System.out.print("\n-> " + nombreTerminal + ", con puertas: ");
 
@@ -34,7 +36,11 @@ public class Main {
             puestosAtencion[i] = new PuestoAtencion(Character.toString((char)(i + 65)), capacidadMaximaFila, terminales);
         }
 
+        // Aeropuerto
         Aeropuerto aeropuerto = new Aeropuerto(puestosAtencion);
+
+        // Tren
+        Tren tren = new Tren(terminales, capacidadTren);
 
         try {
             System.out.println("\nEl aeropuerto se abre en 2 segundos");
@@ -56,10 +62,14 @@ public class Main {
         }
 
         // Pasajeros
-        Thread[] pasajeros = new Thread[50];
+        Thread[] pasajeros = new Thread[numPasajeros];
         for( int i = 0; i < pasajeros.length; i++){
-            pasajeros[i] = new Thread(new Pasajero(aeropuerto), "Pasajero " + i);
+            pasajeros[i] = new Thread(new Pasajero(aeropuerto, tren), "Pasajero " + i);
             pasajeros[i].start();
         }
+
+        // Conductor
+        Thread conductor = new Thread(new Conductor(tren), "Conductor");
+        conductor.start();
     }
 }

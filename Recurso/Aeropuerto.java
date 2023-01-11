@@ -30,4 +30,6 @@ public class Aeropuerto {
         // Retorna un puesto de atencion al pasajero
         return puestosAtencion[new Random().nextInt(puestosAtencion.length)];
     }
+    
+    
 }

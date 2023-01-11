@@ -19,11 +19,11 @@ public class PuestoAtencion {
 
     // ======== Pasajero ========
     public void hacerFila () throws Exception{
-        System.out.println(Thread.currentThread().getName() + " está en el hall.");
+        // System.out.println(Thread.currentThread().getName() + " está en el hall.");
 
         // Espera en el Hall a que haya lugar en la fila
         cola.acquire();
-        System.out.println(Thread.currentThread().getName() + " está haciendo la fila.");
+        // System.out.println(Thread.currentThread().getName() + " está haciendo la fila.");
 
         // Hace la cola y espera a que un guardia le permita pasar
         puesto.acquire();
