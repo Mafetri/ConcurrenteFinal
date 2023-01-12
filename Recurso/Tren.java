@@ -12,7 +12,7 @@ public class Tren {
     public Tren(Terminal[] terminales, int lugaresMax){
         paradas = new Parada[terminales.length];
         for(int i = 0; i < paradas.length; i++){
-            paradas[i] = new Parada(terminales[i].getNombre(), mutex.newCondition());
+            paradas[i] = new Parada(terminales[i], mutex.newCondition());
         }
         this.lugaresMax = lugaresMax;
         lugaresDisponibles = 0;
@@ -26,7 +26,7 @@ public class Tren {
         boolean encontrado = false;
         int index = 0;
         while (!encontrado){
-            if(paradas[index].getNombreTerminal().equals(terminal)){
+            if(paradas[index].getTerminal().getNombre().equals(terminal)){
                 encontrado = true;
             } else {
                 index++;
@@ -68,7 +68,7 @@ public class Tren {
     }
 
     // Se baja del tren
-    public void bajarDelTren(int parada) throws Exception {
+    public Terminal bajarDelTren(int parada) throws Exception {
         mutex.lock();
         try {
             // Se baja del tren
@@ -77,6 +77,8 @@ public class Tren {
             if(paradas[paradaActual].getPasajeros() <= 0){
                 conductor.signal();
             }
+
+            return paradas[parada].getTerminal();
         } finally {
             mutex.unlock();
         }
@@ -106,7 +108,7 @@ public class Tren {
         try {
             // Si no es la ultima parada
             if(paradaActual < paradas.length){
-                System.out.println("-> El tren se detiene en la terminal: " + paradas[paradaActual].getNombreTerminal());
+                System.out.println("-> El tren se detiene en la terminal: " + paradas[paradaActual].getTerminal().getNombre());
                 
                 // Despierta a los pasajeros de la parada actual
                 paradas[paradaActual].getParada().signalAll();

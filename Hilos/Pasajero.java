@@ -11,9 +11,9 @@ public class Pasajero implements Runnable{
         this.aeropuerto = aeropuerto;
         this.tren = tren;
     }
+
     public void run() {
         try {
-            
             Thread.sleep(new Random().nextInt(10000));
             System.out.println(Thread.currentThread().getName() + " intenta ingresal al aeropuerto.");
             if(aeropuerto.ingresarAeropuerto()){
@@ -48,8 +48,30 @@ public class Pasajero implements Runnable{
                 Thread.sleep(new Random().nextInt(2000) + 500);
             
                 // Se baja del tren
-                tren.bajarDelTren(parada);
+                Terminal terminal = tren.bajarDelTren(parada);
                 System.out.println(Thread.currentThread().getName() + " ha bajado del tren en la treminal " + boleto.getTerminal() + " y se dirige a la puerta " + boleto.getPuerta());
+
+                // Entra a la sala de embarque
+                if(new Random().nextBoolean()){
+                    FreeShop freeShop = terminal.getFreeShop();
+                    System.out.println(Thread.currentThread().getName() + " intenta ingresar al freeshop.");
+                    freeShop.entrar();
+                    // Ve productos
+                    Thread.sleep(1000);
+                    
+                    // Compra
+                    int caja = -1;
+                    if(new Random().nextBoolean()) {
+                        caja = freeShop.pagar();
+                        System.out.println(Thread.currentThread().getName() + " esta comprando en la caja " + caja + " de la terminal " + terminal.getNombre());
+                        Thread.sleep(1000);
+                    }
+
+                    // Sale del FreeShop
+                    freeShop.salir(caja);
+                }
+
+                System.out.println(Thread.currentThread().getName() + " terminó.");
             } else {
                 System.out.println(Thread.currentThread().getName() + " no ha podido ingresar al aeropuerto.");
             }

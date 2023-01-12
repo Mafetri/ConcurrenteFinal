@@ -10,8 +10,9 @@ public class Main {
         int numTerminales = 5;
         int numPuertas = 20;
         int unMinuto = 10; // Un minuto equivale a 10 ms
-        int capacidadTren = 10;
-        int numPasajeros = 20;
+        int capacidadTren = 30;
+        int numPasajeros = 100;
+        int capacidadFreeShop = 3;
 
         // Terminales
         Terminal[] terminales = new Terminal[numTerminales];
@@ -27,7 +28,7 @@ public class Main {
                 puertaNum++;
                 System.out.print(puertas[j] + ", ");
             }
-            terminales[i] = new Terminal(nombreTerminal, puertas);
+            terminales[i] = new Terminal(nombreTerminal, puertas, new FreeShop(capacidadFreeShop));
         }
 
         // Puestos de Atencion
