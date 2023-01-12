@@ -15,22 +15,40 @@ public class Pasajero implements Runnable{
         try {
             
             Thread.sleep(new Random().nextInt(10000));
+            System.out.println(Thread.currentThread().getName() + " intenta ingresal al aeropuerto.");
             if(aeropuerto.ingresarAeropuerto()){
-                // System.out.println(Thread.currentThread().getName() + " ha ingresado al aeropuerto.");
+                // Solicita indicaciones a su puesto de atención
                 PuestoAtencion puesto = aeropuerto.puestoInformes();
-                // System.out.println(Thread.currentThread().getName() + " se la ha asignado el puesto " + puesto.getNombre());
+                System.out.println(Thread.currentThread().getName() + " se la ha asignado el puesto " + puesto.getNombre());
+                
+                // Se dirige al puesto de atención y si la cola esta llena espera en el hall
+                System.out.println(Thread.currentThread().getName() + " está en el hall.");
+                puesto.irAlPuesto();
+
+                // Hace fila y espera que el guardia lo atienda
+                System.out.println(Thread.currentThread().getName() + " está haciendo la fila.");
                 puesto.hacerFila();
-                // System.out.println(Thread.currentThread().getName() + " está siendo atendido.");
+
+                // Lo atienden
+                System.out.println(Thread.currentThread().getName() + " está siendo atendido.");
                 Thread.sleep(5000);
                 boleto = puesto.obtenerBoleto();
                 System.out.println("====> " + Thread.currentThread().getName() + " tiene su boleto. (T:"+boleto.getTerminal()+", G:"+boleto.getPuerta()+")");
 
-                // System.out.println(Thread.currentThread().getName() + " está esperando al tren.");
+                // Obtiene cual es la parada en la cual se debe bajar
+                int parada = tren.getParada(boleto.getTerminal());
+
+                System.out.println(Thread.currentThread().getName() + " está esperando al tren.");
                 tren.subirseAlTren();
-                // System.out.println(Thread.currentThread().getName() + " ha subido al tren y espera a la proxima parada.");
-                int numTerminal = tren.esperarATerminal(boleto.getTerminal());
+
+                System.out.println(Thread.currentThread().getName() + " ha subido al tren y espera a llegar a su parada.");
+                tren.esperarATerminal(parada);
+
+                // Tarda en bajarse
                 Thread.sleep(new Random().nextInt(2000) + 500);
-                tren.bajarDelTren(numTerminal);
+            
+                // Se baja del tren
+                tren.bajarDelTren(parada);
                 System.out.println(Thread.currentThread().getName() + " ha bajado del tren en la treminal " + boleto.getTerminal() + " y se dirige a la puerta " + boleto.getPuerta());
             } else {
                 System.out.println(Thread.currentThread().getName() + " no ha podido ingresar al aeropuerto.");

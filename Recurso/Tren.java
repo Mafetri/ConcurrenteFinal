@@ -3,7 +3,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.*;
 public class Tren {
     private Lock mutex = new ReentrantLock();
-    private Terminal[] terminales; 
     private Parada[] paradas;
     private Condition conductor = mutex.newCondition(), trenEstacion = mutex.newCondition();
     private int lugaresDisponibles;
@@ -21,6 +20,22 @@ public class Tren {
     }
 
     // ======== Pasajero ========
+    // Obtiene el numero de parada de su terminal
+    public int getParada(String terminal) {
+        // Busca la condition de su terminal
+        boolean encontrado = false;
+        int index = 0;
+        while (!encontrado){
+            if(paradas[index].getNombreTerminal().equals(terminal)){
+                encontrado = true;
+            } else {
+                index++;
+            }
+        }
+        return index;
+    }
+
+    // Se sube al tren o espera el proximo viaje
     public void subirseAlTren() throws Exception{
         mutex.lock();
         try {
@@ -40,34 +55,24 @@ public class Tren {
         }
     }
 
-    public int esperarATerminal(String terminal) throws Exception{
-        // Busca la condition de su terminal
-        boolean encontrado = false;
-        int index = 0;
-        while (!encontrado){
-            if(paradas[index].getNombreTerminal().equals(terminal)){
-                encontrado = true;
-            } else {
-                index++;
-            }
-        }
-
+    // Espera a que el tren llegue a laterminal
+    public void esperarATerminal(int parada) throws Exception{
         mutex.lock();
         try{
-            paradas[index].agregarPasajero();
+            paradas[parada].agregarPasajero();
             // Espera al que el tren llegue a la terminal deseada
-            paradas[index].getParada().await();
-            return index;
+            paradas[parada].getParada().await();
         } finally {
             mutex.unlock();
         }
     }
 
-    public void bajarDelTren(int index) throws Exception {
+    // Se baja del tren
+    public void bajarDelTren(int parada) throws Exception {
         mutex.lock();
         try {
             // Se baja del tren
-            paradas[index].quitarPasajero();
+            paradas[parada].quitarPasajero();
                 
             if(paradas[paradaActual].getPasajeros() <= 0){
                 conductor.signal();
@@ -75,8 +80,6 @@ public class Tren {
         } finally {
             mutex.unlock();
         }
-
-        
     }
 
     // ======== Conductor ========
