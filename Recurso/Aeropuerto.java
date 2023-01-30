@@ -3,29 +3,25 @@ import java.util.Random;
 
 public class Aeropuerto {
     private final PuestoAtencion[] puestosAtencion;
-    private boolean abierto;
+    private Reloj reloj;
+    private int apertura, cierre;
     
-    public Aeropuerto (PuestoAtencion[] puestosAtencion){
+    public Aeropuerto (Reloj reloj, int apertura, int cierre, PuestoAtencion[] puestosAtencion){
         this.puestosAtencion = puestosAtencion;
-        this.abierto = false;
-    }
-    
-     // ======== Reloj =========
-    public void abrir(){
-        this.abierto = true;
-    }
-    public void cerrar(){
-        this.abierto = false;
+        this.reloj = reloj;
+        this.apertura = apertura;
+        this.cierre = cierre;
     }
 
     // ======== Pasajeros =========
     public boolean ingresarAeropuerto(){
         // Si intenta ingresar entre la hora de apertura y hasta una hora antes del cierre
-        if(abierto){
+        if(reloj.getHora() >= apertura && reloj.getHora() < cierre - 1){
             return true;
         }
         return false;
     }
+    
     public PuestoAtencion puestoInformes(){
         // Retorna un puesto de atencion al pasajero
         return puestosAtencion[new Random().nextInt(puestosAtencion.length)];

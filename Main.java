@@ -3,15 +3,16 @@ import Hilos.*;
 
 public class Main {
     public static void main(String[] args) {
+        int horaInicio = 5; // Hora de inicio del reloj
         int horaApertura = 6;
         int horaCierre = 22;
         int numPuestosAtencion = 3;
         int capacidadMaximaFila = 10;
         int numTerminales = 5;
         int numPuertas = 20;
-        int unMinuto = 10; // Un minuto equivale a 10 ms
-        int capacidadTren = 30;
-        int numPasajeros = 100;
+        int unaHora = 5000; // Valor de una hora en ms
+        int capacidadTren = 10;
+        int numPasajeros = 12;
         int capacidadFreeShop = 3;
 
         // Terminales
@@ -37,23 +38,19 @@ public class Main {
             puestosAtencion[i] = new PuestoAtencion(Character.toString((char)(i + 65)), capacidadMaximaFila, terminales);
         }
 
+        // Reloj
+        Reloj reloj = new Reloj(horaInicio);
+
         // Aeropuerto
-        Aeropuerto aeropuerto = new Aeropuerto(puestosAtencion);
+        Aeropuerto aeropuerto = new Aeropuerto(reloj, horaApertura, horaCierre, puestosAtencion);
 
         // Tren
         Tren tren = new Tren(terminales, capacidadTren);
 
-        try {
-            System.out.println("\nEl aeropuerto se abre en 2 segundos");
-            Thread.sleep(2000);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
         // Hilos
-        // Reloj
-        Thread reloj = new Thread(new Reloj(horaApertura, horaCierre, aeropuerto, unMinuto), "Reloj");
-        reloj.start();
+        // Agujas Reloj
+        Thread agujas = new Thread(new AgujasReloj (reloj, unaHora), "Reloj");
+        agujas.start();
 
         // Guardias
         Thread[] guardias = new Thread[numPuestosAtencion];
