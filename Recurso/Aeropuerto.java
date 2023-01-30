@@ -16,12 +16,12 @@ public class Aeropuerto {
     // ======== Pasajeros =========
     public boolean ingresarAeropuerto(){
         // Si intenta ingresar entre la hora de apertura y hasta una hora antes del cierre
-        if(reloj.getHora() >= apertura && reloj.getHora() < cierre - 1){
+        if(reloj.tiempoDesdeApertura() >= 0 && reloj.tiempoParaCierre() >= 1){
             return true;
         }
         return false;
     }
-    
+
     public PuestoAtencion puestoInformes(){
         // Retorna un puesto de atencion al pasajero
         return puestosAtencion[new Random().nextInt(puestosAtencion.length)];

@@ -6,10 +6,12 @@ public class Pasajero implements Runnable{
     private Boleto boleto;
     private Aeropuerto aeropuerto;
     private Tren tren;
+    private Reloj reloj;
 
-    public Pasajero (Aeropuerto aeropuerto, Tren tren){
+    public Pasajero (Aeropuerto aeropuerto, Tren tren, Reloj reloj){
         this.aeropuerto = aeropuerto;
         this.tren = tren;
+        this.reloj = reloj;
     }
 
     public void run() {
@@ -33,7 +35,7 @@ public class Pasajero implements Runnable{
                 System.out.println(Thread.currentThread().getName() + " está siendo atendido.");
                 Thread.sleep(5000);
                 boleto = puesto.obtenerBoleto();
-                System.out.println("====> " + Thread.currentThread().getName() + " tiene su boleto. (T:"+boleto.getTerminal()+", G:"+boleto.getPuerta()+")");
+                System.out.println("====> " + Thread.currentThread().getName() + " tiene su boleto. (T:"+boleto.getTerminal()+", G:"+boleto.getPuerta()+", H:"+boleto.getHoraEmbarque()+")");
 
                 // Obtiene cual es la parada en la cual se debe bajar
                 int parada = tren.getParada(boleto.getTerminal());
@@ -53,22 +55,29 @@ public class Pasajero implements Runnable{
 
                 // Entra a la sala de embarque
                 if(new Random().nextBoolean()){
-                    FreeShop freeShop = terminal.getFreeShop();
-                    System.out.println(Thread.currentThread().getName() + " intenta ingresar al freeshop.");
-                    freeShop.entrar();
-                    // Ve productos
-                    Thread.sleep(1000);
-                    
-                    // Compra
-                    int caja = -1;
-                    if(new Random().nextBoolean()) {
-                        caja = freeShop.pagar();
-                        System.out.println(Thread.currentThread().getName() + " esta comprando en la caja " + caja + " de la terminal " + terminal.getNombre());
+                    System.out.println(Thread.currentThread().getName() + " quiere ingresar al freeshop.");
+                    // Si falta mas de una hora para el embarque, ingresa al freeshop
+                    if(boleto.getHoraEmbarque() - reloj.getHora() >= 1){
+                        FreeShop freeShop = terminal.getFreeShop();
+                        System.out.println(Thread.currentThread().getName() + " intenta ingresar al freeshop.");
+    
+                        freeShop.entrar();
+                        // Ve productos
                         Thread.sleep(1000);
+                        
+                        // Compra
+                        int caja = -1;
+                        if(new Random().nextBoolean()) {
+                            caja = freeShop.pagar();
+                            System.out.println(Thread.currentThread().getName() + " esta comprando en la caja " + caja + " de la terminal " + terminal.getNombre());
+                            Thread.sleep(1000);
+                        }
+    
+                        // Sale del FreeShop
+                        freeShop.salir(caja);
+                    } else {
+                        System.out.println(Thread.currentThread().getName() + " no llega a ingresar al freeshop.");
                     }
-
-                    // Sale del FreeShop
-                    freeShop.salir(caja);
                 }
 
                 System.out.println(Thread.currentThread().getName() + " terminó.");

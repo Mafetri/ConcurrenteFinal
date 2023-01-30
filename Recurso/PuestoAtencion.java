@@ -34,7 +34,10 @@ public class PuestoAtencion {
 
         int[] puertasDisponibles = TERMINALES[indexTerminal].getPuertas();
         int puerta = puertasDisponibles[new Random().nextInt(puertasDisponibles.length-1)];
-        Boleto boleto = new Boleto(terminal, puerta);
+        // Asigna una hora de embarque que se relaciona con la puerta, para que la gente que se le asigne
+        // dicha puerta tenga la misma hora de embarque
+        int horaEmbarque = (puerta + 34) % 24;
+        Boleto boleto = new Boleto(terminal, puerta, horaEmbarque);
 
         // Libera un lugar en la cola y le avisa al guardia
         cola.release();
