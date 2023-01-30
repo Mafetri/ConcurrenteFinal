@@ -11,8 +11,11 @@ public class Reloj {
         this.horaCierre = horaCierre;
     }
 
-    public void avanzarHora () {
+    public synchronized void avanzarHora () {
+        // Avanza una hora el reloj
         this.horaActual = (this.horaActual + 1) % 24;
+        // Suena la alarma a los pasajeros para que se despierten los dormidos
+        notifyAll();
     }
 
     public int getHora(){
@@ -25,5 +28,11 @@ public class Reloj {
 
     public int tiempoParaCierre() {
         return this.horaCierre - this.horaActual;
+    }
+
+    public synchronized void esperarHora(int hora) throws Exception {
+        while(this.horaActual != hora){
+            wait();
+        }
     }
 }

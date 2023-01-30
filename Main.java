@@ -10,9 +10,9 @@ public class Main {
         int capacidadMaximaFila = 10;
         int numTerminales = 5;
         int numPuertas = 20;
-        int unaHora = 500; // Valor de una hora en ms
+        int unaHora = 5000; // Valor de una hora en ms
         int capacidadTren = 10;
-        int numPasajeros = 50;
+        int numPasajeros = 20;
         int capacidadFreeShop = 3;
 
         // Terminales
@@ -32,17 +32,17 @@ public class Main {
             terminales[i] = new Terminal(nombreTerminal, puertas, new FreeShop(capacidadFreeShop));
         }
 
+        // Reloj
+        Reloj reloj = new Reloj(horaInicio, horaApertura, horaCierre);
+
         // Puestos de Atencion
         PuestoAtencion[] puestosAtencion = new PuestoAtencion[numPuestosAtencion];
         for( int i = 0; i < puestosAtencion.length; i++){
             puestosAtencion[i] = new PuestoAtencion(Character.toString((char)(i + 65)), capacidadMaximaFila, terminales);
         }
 
-        // Reloj
-        Reloj reloj = new Reloj(horaInicio, horaApertura, horaCierre);
-
         // Aeropuerto
-        Aeropuerto aeropuerto = new Aeropuerto(reloj, horaApertura, horaCierre, puestosAtencion);
+        Aeropuerto aeropuerto = new Aeropuerto(reloj, puestosAtencion);
 
         // Tren
         Tren tren = new Tren(terminales, capacidadTren);

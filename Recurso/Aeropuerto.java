@@ -4,13 +4,10 @@ import java.util.Random;
 public class Aeropuerto {
     private final PuestoAtencion[] puestosAtencion;
     private Reloj reloj;
-    private int apertura, cierre;
     
-    public Aeropuerto (Reloj reloj, int apertura, int cierre, PuestoAtencion[] puestosAtencion){
+    public Aeropuerto (Reloj reloj, PuestoAtencion[] puestosAtencion){
         this.puestosAtencion = puestosAtencion;
         this.reloj = reloj;
-        this.apertura = apertura;
-        this.cierre = cierre;
     }
 
     // ======== Pasajeros =========
@@ -26,6 +23,4 @@ public class Aeropuerto {
         // Retorna un puesto de atencion al pasajero
         return puestosAtencion[new Random().nextInt(puestosAtencion.length)];
     }
-    
-    
 }
