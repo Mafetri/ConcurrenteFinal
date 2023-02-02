@@ -1,6 +1,6 @@
 package Recurso;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.*;
+
 public class Tren {
     private Lock mutex = new ReentrantLock();
     private Parada[] paradas;

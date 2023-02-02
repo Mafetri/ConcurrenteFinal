@@ -8,11 +8,11 @@ public class Main {
         int horaCierre = 22;
         int numPuestosAtencion = 3;
         int capacidadMaximaFila = 10;
-        int numTerminales = 5;
+        int numTerminales = 3;
         int numPuertas = 20;
-        int unaHora = 5000; // Valor de una hora en ms
-        int capacidadTren = 10;
-        int numPasajeros = 20;
+        int unaHora = 10000; // Valor de una hora en ms
+        int capacidadTren = 20;
+        int numPasajeros = 200;
         int capacidadFreeShop = 3;
 
         // Terminales

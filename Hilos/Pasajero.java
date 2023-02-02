@@ -16,7 +16,7 @@ public class Pasajero implements Runnable{
 
     public void run() {
         try {
-            Thread.sleep(new Random().nextInt(10000));
+            Thread.sleep(new Random().nextInt(50000));
             System.out.println(Thread.currentThread().getName() + " intenta ingresal al aeropuerto.");
             if(aeropuerto.ingresarAeropuerto()){
                 // Solicita indicaciones a su puesto de atención
