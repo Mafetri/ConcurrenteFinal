@@ -8,11 +8,12 @@ public class Main {
         int horaCierre = 22;
         int numPuestosAtencion = 3;
         int capacidadMaximaFila = 10;
-        int numTerminales = 3;
+        int numTerminales = 5;
         int numPuertas = 20;
         int unaHora = 10000; // Valor de una hora en ms
-        int capacidadTren = 20;
-        int numPasajeros = 200;
+        int capacidadTren = 10;
+        int esperaMaximaConductor = 2; // Valor en horas
+        int numPasajeros = 15;
         int capacidadFreeShop = 3;
 
         // Terminales
@@ -45,7 +46,7 @@ public class Main {
         Aeropuerto aeropuerto = new Aeropuerto(reloj, puestosAtencion);
 
         // Tren
-        Tren tren = new Tren(terminales, capacidadTren);
+        Tren tren = new Tren(terminales, capacidadTren, esperaMaximaConductor * unaHora);
 
         // Hilos
         // Agujas Reloj

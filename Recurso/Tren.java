@@ -1,5 +1,6 @@
 package Recurso;
 import java.util.concurrent.locks.*;
+import java.util.concurrent.TimeUnit;
 
 public class Tren {
     private Lock mutex = new ReentrantLock();
@@ -8,8 +9,10 @@ public class Tren {
     private int lugaresDisponibles;
     private int lugaresMax;
     private int paradaActual;
+    private final int maxEspera;
+    private long msDeDormido = 0;
 
-    public Tren(Terminal[] terminales, int lugaresMax){
+    public Tren(Terminal[] terminales, int lugaresMax, int maxEspera){
         paradas = new Parada[terminales.length];
         for(int i = 0; i < paradas.length; i++){
             paradas[i] = new Parada(terminales[i], mutex.newCondition());
@@ -17,6 +20,7 @@ public class Tren {
         this.lugaresMax = lugaresMax;
         lugaresDisponibles = 0;
         paradaActual = -1;
+        this.maxEspera = maxEspera;
     }
 
     // ======== Pasajero ========
@@ -93,8 +97,9 @@ public class Tren {
             trenEstacion.signalAll();
 
             // Espera a que el tren este lleno
-            while (lugaresDisponibles > 0){
-                conductor.await();
+            msDeDormido = System.currentTimeMillis();
+            while ( lugaresDisponibles > 0 && System.currentTimeMillis() - msDeDormido < maxEspera){
+                conductor.await(maxEspera, TimeUnit.MILLISECONDS);
             }
         } finally {
             mutex.unlock();

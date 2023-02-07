@@ -29,7 +29,7 @@ public class PuestoAtencion {
 
     public Boleto obtenerBoleto() throws Exception{
         // Obtiene su boleto
-        int indexTerminal = new Random().nextInt(3);
+        int indexTerminal = new Random().nextInt(TERMINALES.length);
         String terminal = TERMINALES[indexTerminal].getNombre();
 
         int[] puertasDisponibles = TERMINALES[indexTerminal].getPuertas();
